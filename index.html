@@ -35,12 +35,16 @@
                     },
                     animation: {
                         'scroll': 'scroll 30s linear infinite',
-                        'scroll-slow': 'scroll 45s linear infinite', // Mais lento para fotos
+                        'scroll-slow': 'scroll-photo 45s linear infinite', // Mais lento para fotos
                     },
                     keyframes: {
                         scroll: {
                             '0%': { transform: 'translateX(0)' },
                             '100%': { transform: 'translateX(calc(-300px * 8))' }, /* Ajustado para a largura dos cards novos */
+                        },
+                        'scroll-photo': {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(calc(-344px * 7))' }, /* 320px width + 1.5rem(24px) gap * 7 fotos */
                         }
                     }
                 }
@@ -106,7 +110,7 @@
         }
         .photo-slide-track {
             display: flex;
-            width: calc(350px * 20); /* 10 fotos únicas + 10 duplicadas */
+            width: calc(350px * 14); /* 7 fotos únicas + 7 duplicadas */
             gap: 1.5rem;
         }
         .photo-slide {
@@ -286,19 +290,10 @@
                 <div class="relative">
                     <div class="absolute inset-0 bg-brand rounded-3xl transform rotate-3 scale-105 opacity-20"></div>
                     
-                    
-<!-- ========================================== -->
-<!-- AQUI VOCÊ COLOCA A FOTO OFICIAL DO GRUPO TODO (SE TIVER) -->
-<!-- Troque o conteudo da div abaixo por uma imagem real -->
-<img src="assets/principal.jpeg" class="w-full h-auto rounded-3xl shadow-lg relative z-10" alt="Equipe Nupefid"> 
-<!-- ========================================== -->
-                    <div class="bg-gray-100 rounded-3xl p-8 relative border border-gray-200 shadow-lg text-center h-[400px] flex flex-col items-center justify-center z-10 overflow-hidden">
-                        <div class="text-brand/50 mb-4">
-                            <i class="fa-solid fa-users text-8xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-800 font-sans">[ Foto Principal do Núcleo ]</h3>
-                        <p class="text-gray-500 mt-2 text-sm text-balance">No código (HTML), procure por "FOTO OFICIAL DO GRUPO TODO" e coloque a imagem aqui.</p>
-                    </div>
+                    <!-- ========================================== -->
+                    <!-- AQUI VOCÊ COLOCA A FOTO OFICIAL DO GRUPO TODO (SE TIVER) -->
+                    <img src="assets/principal.jpeg" class="w-full h-auto rounded-3xl shadow-lg relative z-10" alt="Equipe Nupefid">
+                    <!-- ========================================== -->
 
                 </div>
             </div>
@@ -308,7 +303,7 @@
     <!-- Carousel Fotos do Núcleo (NOVO) -->
     <section id="galeria" class="py-20 bg-gray-900 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-10">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-white font-sans mb-4">Nosso Dia a Dia</h2>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white font-sans mb-4">Nossa galeria</h2>
             <div class="w-24 h-1 bg-brand mx-auto rounded"></div>
             <p class="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">Confira os registros de nossos projetos, eventos e do dia a dia da nossa equipe.</p>
         </div>
@@ -317,70 +312,82 @@
             <div class="photo-slide-track animate-scroll-slow hover:[animation-play-state:paused]">
                 
                 <!-- ========================================== -->
-                <!-- AQUI VOCÊ ADICIONA AS SUAS 10 FOTOS REAIS DO NÚCLEO -->
-                <!-- Onde tem o <img>, substitua o 'src' pelo caminho da sua foto -->
-                <!-- Exemplo: <img src="imagens/foto1.jpg" alt="Foto NUPEFID"> -->
+                <!-- AQUI VOCÊ ADICIONA AS SUAS FOTOS REAIS DO NÚCLEO -->
                 <!-- ========================================== -->
 
                 <!-- FOTO 1 -->
                 <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
-                    <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=350&h=220" alt="Exemplo Academia">
+                    <img src="assets/foto1.jpg" alt="Foto 1 NUPEFID">
                 </div>
                 <!-- FOTO 2 -->
                 <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
-                    <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=350&h=220" alt="Exemplo Pesquisa">
+                    <img src="assets/foto2.jpg" alt="Foto 2 NUPEFID">
                 </div>
                 <!-- FOTO 3 -->
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
-                    <!-- FOTO 3 - Substitua esta Div pela sua tag <img src="..."> -->
-                    [ INSIRA FOTO 3 AQUI ]
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
+                    <img src="assets/foto3.jpg" alt="Foto 3 NUPEFID">
                 </div>
                 <!-- FOTO 4 -->
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
-                    [ INSIRA FOTO 4 AQUI ]
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
+                    <img src="assets/foto4.jpeg" alt="Foto 4 NUPEFID">
                 </div>
                 <!-- FOTO 5 -->
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
-                    [ INSIRA FOTO 5 AQUI ]
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
+                    <img src="assets/foto5.jpeg" alt="Foto 5 NUPEFID">
                 </div>
                 <!-- FOTO 6 -->
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
-                    [ INSIRA FOTO 6 AQUI ]
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
+                    <img src="assets/foto6.jpeg" alt="Foto 6 NUPEFID">
                 </div>
                 <!-- FOTO 7 -->
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
-                    [ INSIRA FOTO 7 AQUI ]
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
+                    <img src="assets/foto7.jpeg" alt="Foto 7 NUPEFID">
                 </div>
-                <!-- FOTO 8 -->
+
+                <!-- FOTOS 8, 9 E 10 OCULTADAS (Para usar no futuro, basta remover os marcadores de comentário abaixo) -->
+                <!--
                 <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
                     [ INSIRA FOTO 8 AQUI ]
                 </div>
-                <!-- FOTO 9 -->
                 <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
                     [ INSIRA FOTO 9 AQUI ]
                 </div>
-                <!-- FOTO 10 -->
                 <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
                     [ INSIRA FOTO 10 AQUI ]
                 </div>
+                -->
 
                 <!-- IMPORTANTE: Para o efeito de rolagem infinita ficar perfeito,
                      as mesmas fotos acima DEVEM ser duplicadas aqui embaixo. -->
                 
                 <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
-                    <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=350&h=220" alt="Exemplo Academia">
+                    <img src="assets/foto1.jpg" alt="Foto 1 NUPEFID">
                 </div>
                 <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
-                    <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=350&h=220" alt="Exemplo Pesquisa">
+                    <img src="assets/foto2.jpg" alt="Foto 2 NUPEFID">
                 </div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 3 AQUI ]</div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 4 AQUI ]</div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 5 AQUI ]</div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 6 AQUI ]</div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 7 AQUI ]</div>
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
+                    <img src="assets/foto3.jpg" alt="Foto 3 NUPEFID">
+                </div>
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
+                    <img src="assets/foto4.jpeg" alt="Foto 4 NUPEFID">
+                </div>
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
+                    <img src="assets/foto5.jpeg" alt="Foto 5 NUPEFID">
+                </div>
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
+                    <img src="assets/foto6.jpeg" alt="Foto 6 NUPEFID">
+                </div>
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
+                    <img src="assets/foto7.jpeg" alt="Foto 7 NUPEFID">
+                </div>
+
+                <!-- Ocultos duplicados -->
+                <!--
                 <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 8 AQUI ]</div>
                 <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 9 AQUI ]</div>
                 <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 10 AQUI ]</div>
+                -->
 
             </div>
         </div>
