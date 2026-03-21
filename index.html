@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUPEFID - Núcleo de Pesquisa em Exercício Físico e Doenças Crônicas | UFSC</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Custom Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        body: ['Open Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            light: '#42c0a6',
+                            DEFAULT: '#29a58c', // Cor baseada nas imagens do núcleo
+                            dark: '#1a6858',
+                            blue: '#1e3a8a', // Cor azul da CAPES/UFSC
+                        }
+                    },
+                    animation: {
+                        'scroll': 'scroll 30s linear infinite',
+                        'scroll-slow': 'scroll 45s linear infinite', // Mais lento para fotos
+                    },
+                    keyframes: {
+                        scroll: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(calc(-300px * 8))' }, /* Ajustado para a largura dos cards novos */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles for Infinite Carousel (Projetos) */
+        .slider {
+            background: white;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.125);
+            height: auto;
+            margin: auto;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            padding: 2rem 0;
+        }
+        
+        .slider::before,
+        .slider::after {
+            background: linear-gradient(to right, white 0%, rgba(255, 255, 255, 0) 100%);
+            content: "";
+            height: 100%;
+            position: absolute;
+            width: 10%;
+            z-index: 2;
+            top: 0;
+        }
+        .slider::before { left: 0; }
+        .slider::after { right: 0; transform: rotateZ(180deg); }
+        
+        .slide-track {
+            display: flex;
+            width: calc(250px * 16);
+            gap: 2rem;
+        }
+        
+        .slide {
+            width: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            background: #f8fafc;
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+        .slide:hover { transform: translateY(-5px); border-color: #29a58c; }
+
+        /* Custom Styles for Infinite Carousel (Fotos Maiores) */
+        .photo-slider {
+            background: transparent;
+            height: auto;
+            margin: auto;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            padding: 1rem 0;
+        }
+        .photo-slide-track {
+            display: flex;
+            width: calc(350px * 20); /* 10 fotos únicas + 10 duplicadas */
+            gap: 1.5rem;
+        }
+        .photo-slide {
+            width: 320px;
+            height: 220px;
+            border-radius: 1rem;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+        .photo-slide:hover { transform: scale(1.02); }
+        .photo-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Detalhes de Alunos (Accordion) */
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-body antialiased selection:bg-brand selection:text-white">
+
+    <!-- Header / Navbar -->
+    <header class="bg-white/90 backdrop-blur-md shadow-sm fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3">
+                    <div>
+                        <h1 class="font-sans font-bold text-2xl text-brand-dark leading-none">NUPEFID</h1>
+                        <span class="text-[10px] sm:text-xs text-gray-500 font-semibold tracking-wide block max-w-[200px] sm:max-w-xs leading-tight mt-1">
+                            Núcleo de Pesquisa em Exercício<br>Físico e Doenças Crônicas
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex space-x-6 lg:space-x-8">
+                    <a href="#sobre" class="text-gray-600 hover:text-brand font-semibold transition text-sm lg:text-base">Sobre</a>
+                    <a href="#projetos" class="text-gray-600 hover:text-brand font-semibold transition text-sm lg:text-base">Projetos</a>
+                    <a href="#galeria" class="text-gray-600 hover:text-brand font-semibold transition text-sm lg:text-base">Galeria</a>
+                    <a href="#docentes" class="text-gray-600 hover:text-brand font-semibold transition text-sm lg:text-base">Equipe</a>
+                    <a href="#publicacoes" class="text-gray-600 hover:text-brand font-semibold transition text-sm lg:text-base">Publicações</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-brand focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-lg absolute w-full max-h-screen overflow-y-auto">
+            <div class="px-4 pt-2 pb-4 space-y-1">
+                <a href="#sobre" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-brand hover:bg-gray-50 rounded-md">Sobre</a>
+                <a href="#projetos" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-brand hover:bg-gray-50 rounded-md">Projetos</a>
+                <a href="#galeria" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-brand hover:bg-gray-50 rounded-md">Galeria de Fotos</a>
+                <a href="#docentes" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-brand hover:bg-gray-50 rounded-md">Equipe & Alunos</a>
+                <a href="#publicacoes" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-brand hover:bg-gray-50 rounded-md">Publicações</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-brand">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 32px 32px;"></div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-sm font-semibold mb-6">
+                <i class="fa-solid fa-star text-yellow-300"></i>
+                Programa de Pós-Graduação Nota 7 CAPES
+            </div>
+            
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-sans font-extrabold tracking-tight mb-6">
+                Conheça o <span class="text-yellow-300">NuPEFID!</span>
+            </h1>
+            
+            <p class="max-w-3xl mx-auto text-lg md:text-xl font-body leading-relaxed mb-10 text-white/90">
+                O Núcleo de Pesquisa em Exercício Físico e Doenças Crônicas da UFSC reúne pesquisadores dedicados a estudar o papel do exercício físico na prevenção e tratamento de doenças crônicas como câncer, diabetes, hipertensão, obesidade e depressão.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="https://www.instagram.com/nupefid/" target="_blank" class="bg-brand-dark text-white border border-white/30 font-bold py-4 px-8 rounded-full shadow-lg hover:bg-opacity-80 hover:scale-105 transition transform duration-200 flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-instagram text-xl"></i> Siga nosso Instagram
+                </a>
+            </div>
+        </div>
+        
+        <!-- Wave Divider -->
+        <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
+            <svg class="relative block w-full h-[50px] md:h-[100px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118,130.9,132.1,200.7,126.9,251.2,123.1,300.9,109.8,349.5,92.8c29-10.1,57.7-21.7,86.6-32.9Z" fill="#f9fafb"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-10 bg-gray-50 -mt-10 relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Stat 1 -->
+                <div class="bg-white rounded-2xl p-6 shadow-xl shadow-brand/10 text-center transform hover:-translate-y-2 transition duration-300 border-b-4 border-brand">
+                    <div class="w-16 h-16 mx-auto bg-brand/10 text-brand rounded-full flex items-center justify-center text-3xl mb-4">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <h3 class="text-4xl font-extrabold text-brand-dark font-sans">Nota 7</h3>
+                    <p class="text-gray-600 font-semibold mt-2">Avaliação Máxima CAPES</p>
+                </div>
+                <!-- Stat 2 -->
+                <div class="bg-white rounded-2xl p-6 shadow-xl shadow-brand/10 text-center transform hover:-translate-y-2 transition duration-300 border-b-4 border-brand">
+                    <div class="w-16 h-16 mx-auto bg-brand/10 text-brand rounded-full flex items-center justify-center text-3xl mb-4">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <h3 class="text-4xl font-extrabold text-brand-dark font-sans">+50</h3>
+                    <p class="text-gray-600 font-semibold mt-2">Alunos já passaram pelo núcleo</p>
+                </div>
+                <!-- Stat 3 (AJUSTADO CONFORME PEDIDO) -->
+                <div class="bg-white rounded-2xl p-6 shadow-xl shadow-brand/10 text-center transform hover:-translate-y-2 transition duration-300 border-b-4 border-brand flex flex-col justify-center">
+                    <div class="w-16 h-16 mx-auto bg-brand/10 text-brand rounded-full flex items-center justify-center text-3xl mb-4">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <h3 class="text-2xl font-extrabold text-brand-dark font-sans leading-tight">Projeto de Pesquisa e Extensão</h3>
+                    <p class="text-gray-600 font-semibold mt-2">Desde crianças a idosos</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre o Núcleo -->
+    <section id="sobre" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 font-sans mb-6">
+                        Produzindo conhecimento científico e promovendo <span class="text-brand">Saúde</span>
+                    </h2>
+                    <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                        Nosso time é formado por docentes especialistas, comprometidos em gerar conhecimento científico e promover saúde para diferentes populações, visando a formação de recursos humanos qualificados.
+                    </p>
+                    
+                    <div class="bg-brand/5 border border-brand/20 rounded-xl p-6 mt-8">
+                        <h3 class="font-bold text-lg text-brand-dark mb-4">Dentro do NUPEFID temos:</h3>
+                        <div class="space-y-6">
+                            <!-- GEPEFID -->
+                            <div class="flex items-start gap-4">
+                                <div class="flex-shrink-0 w-12 h-12 bg-white rounded-lg flex items-center justify-center text-brand text-xl font-bold border border-brand/20 shadow-sm">
+                                    <i class="fa-solid fa-vial-circle-check"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold text-gray-900 font-sans">GEPEFID</h4>
+                                    <p class="text-gray-600 mt-1 text-sm">Grupo de Estudo e Pesquisa em Exercício Físico e Doenças Crônicas Não Transmissíveis.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- GPEC -->
+                            <div class="flex items-start gap-4">
+                                <div class="flex-shrink-0 w-12 h-12 bg-white rounded-lg flex items-center justify-center text-brand text-xl font-bold border border-brand/20 shadow-sm">
+                                    <i class="fa-solid fa-stethoscope"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold text-gray-900 font-sans">GPEC</h4>
+                                    <p class="text-gray-600 mt-1 text-sm">Grupo de Pesquisa em Exercício Clínico.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="absolute inset-0 bg-brand rounded-3xl transform rotate-3 scale-105 opacity-20"></div>
+                    
+                    <!-- ========================================== -->
+                    <!-- AQUI VOCÊ COLOCA A FOTO OFICIAL DO GRUPO TODO (SE TIVER) -->
+                    <!-- Troque o conteudo da div abaixo por uma imagem real -->
+                    <!-- <img src="URL-DA-FOTO-AQUI" class="w-full h-auto rounded-3xl shadow-lg relative z-10" alt="Equipe Nupefid"> -->
+                    <!-- ========================================== -->
+                    <div class="bg-gray-100 rounded-3xl p-8 relative border border-gray-200 shadow-lg text-center h-[400px] flex flex-col items-center justify-center z-10 overflow-hidden">
+                        <div class="text-brand/50 mb-4">
+                            <i class="fa-solid fa-users text-8xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 font-sans">[ Foto Principal do Núcleo ]</h3>
+                        <p class="text-gray-500 mt-2 text-sm text-balance">No código (HTML), procure por "FOTO OFICIAL DO GRUPO TODO" e coloque a imagem aqui.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Carousel Fotos do Núcleo (NOVO) -->
+    <section id="galeria" class="py-20 bg-gray-900 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-10">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white font-sans mb-4">Nosso Dia a Dia</h2>
+            <div class="w-24 h-1 bg-brand mx-auto rounded"></div>
+            <p class="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">Confira os registros de nossos projetos, eventos e do dia a dia da nossa equipe.</p>
+        </div>
+
+        <div class="photo-slider relative">
+            <div class="photo-slide-track animate-scroll-slow hover:[animation-play-state:paused]">
+                
+                <!-- ========================================== -->
+                <!-- AQUI VOCÊ ADICIONA AS SUAS 10 FOTOS REAIS DO NÚCLEO -->
+                <!-- Onde tem o <img>, substitua o 'src' pelo caminho da sua foto -->
+                <!-- Exemplo: <img src="imagens/foto1.jpg" alt="Foto NUPEFID"> -->
+                <!-- ========================================== -->
+
+                <!-- FOTO 1 -->
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
+                    <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=350&h=220" alt="Exemplo Academia">
+                </div>
+                <!-- FOTO 2 -->
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
+                    <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=350&h=220" alt="Exemplo Pesquisa">
+                </div>
+                <!-- FOTO 3 -->
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
+                    <!-- FOTO 3 - Substitua esta Div pela sua tag <img src="..."> -->
+                    [ INSIRA FOTO 3 AQUI ]
+                </div>
+                <!-- FOTO 4 -->
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
+                    [ INSIRA FOTO 4 AQUI ]
+                </div>
+                <!-- FOTO 5 -->
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
+                    [ INSIRA FOTO 5 AQUI ]
+                </div>
+                <!-- FOTO 6 -->
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
+                    [ INSIRA FOTO 6 AQUI ]
+                </div>
+                <!-- FOTO 7 -->
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
+                    [ INSIRA FOTO 7 AQUI ]
+                </div>
+                <!-- FOTO 8 -->
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
+                    [ INSIRA FOTO 8 AQUI ]
+                </div>
+                <!-- FOTO 9 -->
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
+                    [ INSIRA FOTO 9 AQUI ]
+                </div>
+                <!-- FOTO 10 -->
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">
+                    [ INSIRA FOTO 10 AQUI ]
+                </div>
+
+                <!-- IMPORTANTE: Para o efeito de rolagem infinita ficar perfeito,
+                     as mesmas fotos acima DEVEM ser duplicadas aqui embaixo. -->
+                
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
+                    <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=350&h=220" alt="Exemplo Academia">
+                </div>
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700">
+                    <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=350&h=220" alt="Exemplo Pesquisa">
+                </div>
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 3 AQUI ]</div>
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 4 AQUI ]</div>
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 5 AQUI ]</div>
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 6 AQUI ]</div>
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 7 AQUI ]</div>
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 8 AQUI ]</div>
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 9 AQUI ]</div>
+                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700 text-gray-500 font-bold text-center p-4">[ REPETIR FOTO 10 AQUI ]</div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Carousel Projetos (Logos redondos) -->
+    <section id="projetos" class="py-20 bg-gray-50 border-b border-gray-200 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 font-sans mb-4">Nossos Projetos de Extensão</h2>
+            <div class="w-24 h-1 bg-brand mx-auto rounded"></div>
+            <p class="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">Atuamos ativamente na comunidade através de diversos programas focados em diferentes públicos e necessidades.</p>
+        </div>
+
+        <div class="slider">
+            <div class="slide-track animate-scroll">
+                <!-- Slides de Projetos de Extensão (Pode deixar os ícones ou trocar por imagens dps) -->
+                <div class="slide"><div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-arrow-trend-up"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">Mov+</h3><p class="text-sm text-gray-500 text-center mt-2">Treinamento para população com excesso de peso.</p></div>
+                <div class="slide"><div class="w-16 h-16 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-ribbon"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">AtivaOnco</h3><p class="text-sm text-gray-500 text-center mt-2">Atividade para crianças/adolescentes no tratamento oncológico.</p></div>
+                <div class="slide"><div class="w-16 h-16 bg-cyan-100 text-cyan-600 rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-water-ladder"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">Aquadia</h3><p class="text-sm text-gray-500 text-center mt-2">Treinamento aquático no controle do Diabetes Tipo 2.</p></div>
+                <div class="slide"><div class="w-16 h-16 bg-brand/20 text-brand-dark rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-person-running"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">Movimen"TAES"</h3><p class="text-sm text-gray-500 text-center mt-2">Promoção de saúde através do movimento.</p></div>
+                <div class="slide"><div class="w-16 h-16 bg-blue-200 text-blue-700 rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-water"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">Atividades Aquáticas</h3><p class="text-sm text-gray-500 text-center mt-2">Exercícios em posição vertical.</p></div>
+                <div class="slide"><div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-volleyball"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">Voleibol Master</h3><p class="text-sm text-gray-500 text-center mt-2">Prática esportiva focada na melhor idade.</p></div>
+                <div class="slide"><div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-ear-listen"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">Otoativa</h3><p class="text-sm text-gray-500 text-center mt-2">Avaliações audiológicas e funcionais para idosos.</p></div>
+                <div class="slide"><div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-heart-crack"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">Procor</h3><p class="text-sm text-gray-500 text-center mt-2">Prevenção e reabilitação cardiorrespiratória.</p></div>
+                <!-- Duplicados para loop infinito -->
+                <div class="slide"><div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-arrow-trend-up"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">Mov+</h3><p class="text-sm text-gray-500 text-center mt-2">Treinamento para população com excesso de peso.</p></div>
+                <div class="slide"><div class="w-16 h-16 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-ribbon"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">AtivaOnco</h3><p class="text-sm text-gray-500 text-center mt-2">Atividade para crianças/adolescentes no tratamento oncológico.</p></div>
+                <div class="slide"><div class="w-16 h-16 bg-cyan-100 text-cyan-600 rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-water-ladder"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">Aquadia</h3><p class="text-sm text-gray-500 text-center mt-2">Treinamento aquático no controle do Diabetes Tipo 2.</p></div>
+                <div class="slide"><div class="w-16 h-16 bg-brand/20 text-brand-dark rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-person-running"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">Movimen"TAES"</h3><p class="text-sm text-gray-500 text-center mt-2">Promoção de saúde através do movimento.</p></div>
+                <div class="slide"><div class="w-16 h-16 bg-blue-200 text-blue-700 rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-water"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">Atividades Aquáticas</h3><p class="text-sm text-gray-500 text-center mt-2">Exercícios em posição vertical.</p></div>
+                <div class="slide"><div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-volleyball"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">Voleibol Master</h3><p class="text-sm text-gray-500 text-center mt-2">Prática esportiva focada na melhor idade.</p></div>
+                <div class="slide"><div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-ear-listen"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">Otoativa</h3><p class="text-sm text-gray-500 text-center mt-2">Avaliações audiológicas e funcionais para idosos.</p></div>
+                <div class="slide"><div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-heart-crack"></i></div><h3 class="font-bold text-gray-800 text-lg text-center font-sans">Procor</h3><p class="text-sm text-gray-500 text-center mt-2">Prevenção e reabilitação cardiorrespiratória.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipe e Docentes (Ajustado para Centralizar os dois ultimos) -->
+    <section id="docentes" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 font-sans mb-4">Conheça Nosso Corpo Docente</h2>
+                <div class="w-24 h-1 bg-brand mx-auto rounded"></div>
+            </div>
+
+            <!-- Usando flex-wrap justify-center faz com que 3 fiquem em cima e 2 centralizados na linha de baixo! -->
+            <div class="flex flex-wrap justify-center gap-10 lg:gap-14 px-4 sm:px-0">
+                
+                <!-- Prof. Aline -->
+                <div class="group text-center w-full sm:w-64 flex-shrink-0">
+                    <div class="relative w-48 h-48 mx-auto mb-6 rounded-full p-2 border-4 border-transparent group-hover:border-brand transition duration-300">
+                        <div class="w-full h-full rounded-full bg-gray-200 overflow-hidden flex items-center justify-center bg-brand-dark relative">
+                            <!-- ========================================== -->
+                            <!-- FOTO DA PROFA. ALINE AQUI -->
+                            <!-- <img src="URL-AQUI" class="w-full h-full object-cover"> -->
+                            <!-- ========================================== -->
+                            <i class="fa-solid fa-user-tie text-white text-6xl opacity-50"></i>
+                            <div class="absolute inset-0 bg-brand mix-blend-multiply opacity-20 pointer-events-none"></div>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 font-sans mb-1">Profa. Dra. Aline Gerage</h3>
+                    <p class="text-brand font-semibold text-sm mb-3">Docente e Pesquisadora</p>
+                    <p class="text-gray-500 text-sm">Hipertensão arterial, mudança de comportamento e saúde móvel.</p>
+                </div>
+
+                <!-- Prof. Cintia -->
+                <div class="group text-center w-full sm:w-64 flex-shrink-0">
+                    <div class="relative w-48 h-48 mx-auto mb-6 rounded-full p-2 border-4 border-transparent group-hover:border-brand transition duration-300">
+                        <div class="w-full h-full rounded-full bg-gray-200 overflow-hidden flex items-center justify-center bg-brand-dark relative">
+                            <!-- ========================================== -->
+                            <!-- FOTO DA PROFA. CINTIA AQUI -->
+                            <!-- <img src="URL-AQUI" class="w-full h-full object-cover"> -->
+                            <!-- ========================================== -->
+                            <i class="fa-solid fa-user-tie text-white text-6xl opacity-50"></i>
+                            <div class="absolute inset-0 bg-brand mix-blend-multiply opacity-20 pointer-events-none"></div>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 font-sans mb-1">Profa. Dra. Cíntia Freitas</h3>
+                    <p class="text-brand font-semibold text-sm mb-3">Docente e Pesquisadora</p>
+                    <p class="text-gray-500 text-sm">Pesquisa em Exercício Clínico e Promoção de Saúde.</p>
+                </div>
+
+                <!-- Prof. Giovani -->
+                <div class="group text-center w-full sm:w-64 flex-shrink-0">
+                    <div class="relative w-48 h-48 mx-auto mb-6 rounded-full p-2 border-4 border-transparent group-hover:border-brand transition duration-300">
+                        <div class="w-full h-full rounded-full bg-gray-200 overflow-hidden flex items-center justify-center bg-brand-dark relative">
+                            <!-- ========================================== -->
+                            <!-- FOTO DO PROF. GIOVANI AQUI -->
+                            <!-- <img src="URL-AQUI" class="w-full h-full object-cover"> -->
+                            <!-- ========================================== -->
+                            <i class="fa-solid fa-user-tie text-white text-6xl opacity-50"></i>
+                            <div class="absolute inset-0 bg-brand mix-blend-multiply opacity-20 pointer-events-none"></div>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 font-sans mb-1">Prof. Dr. Giovani Del Duca</h3>
+                    <p class="text-brand font-semibold text-sm mb-3">Docente e Pesquisador</p>
+                    <p class="text-gray-500 text-sm">Epidemiologia da atividade física, comportamento sedentário e obesidade.</p>
+                </div>
+
+                <!-- Prof. Jucemar (AGORA CENTRALIZADO NA LINHA DE BAIXO EM TELAS GRANDES) -->
+                <div class="group text-center w-full sm:w-64 flex-shrink-0">
+                    <div class="relative w-48 h-48 mx-auto mb-6 rounded-full p-2 border-4 border-transparent group-hover:border-brand transition duration-300">
+                        <div class="w-full h-full rounded-full bg-gray-200 overflow-hidden flex items-center justify-center bg-brand-dark relative">
+                            <!-- ========================================== -->
+                            <!-- FOTO DO PROF. JUCEMAR AQUI -->
+                            <!-- <img src="URL-AQUI" class="w-full h-full object-cover"> -->
+                            <!-- ========================================== -->
+                            <i class="fa-solid fa-user-tie text-white text-6xl opacity-50"></i>
+                            <div class="absolute inset-0 bg-brand mix-blend-multiply opacity-20 pointer-events-none"></div>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 font-sans mb-1">Prof. Dr. Jucemar Benedet</h3>
+                    <p class="text-brand font-semibold text-sm mb-3">Docente e Pesquisador</p>
+                    <p class="text-gray-500 text-sm">Exercício voltado para populações especiais e esportes.</p>
+                </div>
+
+                <!-- Prof. Rodrigo (AGORA CENTRALIZADO NA LINHA DE BAIXO EM TELAS GRANDES) -->
+                <div class="group text-center w-full sm:w-64 flex-shrink-0">
+                    <div class="relative w-48 h-48 mx-auto mb-6 rounded-full p-2 border-4 border-transparent group-hover:border-brand transition duration-300">
+                        <div class="w-full h-full rounded-full bg-gray-200 overflow-hidden flex items-center justify-center bg-brand-dark relative">
+                            <!-- ========================================== -->
+                            <!-- FOTO DO PROF. RODRIGO AQUI -->
+                            <!-- <img src="URL-AQUI" class="w-full h-full object-cover"> -->
+                            <!-- ========================================== -->
+                            <i class="fa-solid fa-user-tie text-white text-6xl opacity-50"></i>
+                            <div class="absolute inset-0 bg-brand mix-blend-multiply opacity-20 pointer-events-none"></div>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 font-sans mb-1">Prof. Dr. Rodrigo Delevatti</h3>
+                    <p class="text-brand font-semibold text-sm mb-3">Docente e Pesquisador</p>
+                    <p class="text-gray-500 text-sm">Treinamento físico, meios aquático e terrestre, diabetes tipo 2.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Lista de Alunos (Interativa) -->
+    <section class="py-16 bg-gray-50 border-t border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h3 class="text-2xl font-extrabold text-gray-900 font-sans mb-2">Alunos que já passaram pelo Núcleo</h3>
+                <p class="text-gray-600">Clique nas categorias abaixo para expandir e ver a lista completa.</p>
+            </div>
+
+            <div class="space-y-4">
+                
+                <!-- ACORDEÃO MESTRADO -->
+                <details class="group bg-white rounded-xl shadow-sm border border-gray-200 open:shadow-md transition-all duration-300">
+                    <summary class="flex justify-between items-center cursor-pointer p-5 font-bold text-lg text-brand-dark font-sans select-none">
+                        <span><i class="fa-solid fa-graduation-cap mr-2"></i> Mestrado</span>
+                        <span class="transition group-open:rotate-180">
+                            <i class="fa-solid fa-chevron-down text-gray-400"></i>
+                        </span>
+                    </summary>
+                    <div class="p-5 border-t border-gray-100 bg-gray-50/50">
+                        <ul class="space-y-3">
+                            <!-- ALUNO DE MESTRADO 1 -->
+                            <li class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                <div>
+                                    <strong class="text-gray-900 block">João da Silva Exemplo</strong>
+                                    <span class="text-sm text-gray-500 italic">"Efeitos do treinamento em ambiente aquático..."</span>
+                                </div>
+                            </li>
+                            <!-- ALUNO DE MESTRADO 2 -->
+                            <li class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                <div>
+                                    <strong class="text-gray-900 block">Maria Sousa Exemplo</strong>
+                                    <span class="text-sm text-gray-500 italic">"Análise da intervenção física na hipertensão..."</span>
+                                </div>
+                            </li>
+                            <!-- ========================================== -->
+                            <!-- ADICIONE UM NOVO ALUNO DE MESTRADO COPIANDO O BLOCO DE <li> ACIMA -->
+                            <!-- ========================================== -->
+                        </ul>
+                    </div>
+                </details>
+
+                <!-- ACORDEÃO DOUTORADO -->
+                <details class="group bg-white rounded-xl shadow-sm border border-gray-200 open:shadow-md transition-all duration-300">
+                    <summary class="flex justify-between items-center cursor-pointer p-5 font-bold text-lg text-brand-dark font-sans select-none">
+                        <span><i class="fa-solid fa-user-graduate mr-2"></i> Doutorado</span>
+                        <span class="transition group-open:rotate-180">
+                            <i class="fa-solid fa-chevron-down text-gray-400"></i>
+                        </span>
+                    </summary>
+                    <div class="p-5 border-t border-gray-100 bg-gray-50/50">
+                        <ul class="space-y-3">
+                            <!-- ALUNO DE DOUTORADO 1 -->
+                            <li class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                <div>
+                                    <strong class="text-gray-900 block">Dra. Ana Pereira</strong>
+                                    <span class="text-sm text-gray-500 italic">"Impactos longitudinais da atividade física em idosos diabéticos"</span>
+                                </div>
+                            </li>
+                            <!-- ========================================== -->
+                            <!-- ADICIONE NOVO ALUNO DOUTORADO AQUI -->
+                            <!-- ========================================== -->
+                        </ul>
+                    </div>
+                </details>
+
+                <!-- ACORDEÃO PÓS-DOUTORADO -->
+                <details class="group bg-white rounded-xl shadow-sm border border-gray-200 open:shadow-md transition-all duration-300">
+                    <summary class="flex justify-between items-center cursor-pointer p-5 font-bold text-lg text-brand-dark font-sans select-none">
+                        <span><i class="fa-solid fa-microscope mr-2"></i> Pós-Doutorado</span>
+                        <span class="transition group-open:rotate-180">
+                            <i class="fa-solid fa-chevron-down text-gray-400"></i>
+                        </span>
+                    </summary>
+                    <div class="p-5 border-t border-gray-100 bg-gray-50/50">
+                        <ul class="space-y-3">
+                            <!-- PESQUISADOR PÓS-DOC -->
+                            <li class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                <div>
+                                    <strong class="text-gray-900 block">Dr. Carlos Roberto</strong>
+                                    <span class="text-sm text-gray-500 italic">"Pesquisa avançada em biomarcadores inflamatórios no esporte"</span>
+                                </div>
+                            </li>
+                            <!-- ========================================== -->
+                            <!-- ADICIONE NOVO ALUNO PÓS-DOC AQUI -->
+                            <!-- ========================================== -->
+                        </ul>
+                    </div>
+                </details>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Publicações (Nova Seção Pedida) -->
+    <section id="publicacoes" class="py-20 bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-brand font-bold uppercase tracking-wider text-sm">Produção Científica</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 font-sans mt-2 mb-4">Artigos Publicados</h2>
+                <div class="w-24 h-1 bg-brand mx-auto rounded"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- ARTIGO 1 -->
+                <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 hover:shadow-lg transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-xs font-bold text-brand mb-3 uppercase tracking-wide">
+                            <i class="fa-solid fa-book-open"></i> Revista de Educação Física
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 leading-tight">
+                            Efeitos do treinamento de força na qualidade de vida de hipertensos
+                        </h3>
+                        <p class="text-sm text-gray-600 mb-6">
+                            Autores: Gerage, A., Del Duca, G., Silva, J.
+                        </p>
+                    </div>
+                    <!-- ========================================== -->
+                    <!-- LINK DO ARTIGO 1 AQUI NO 'href' -->
+                    <!-- ========================================== -->
+                    <a href="URL-DO-ARTIGO" target="_blank" class="inline-flex items-center text-sm font-bold text-brand hover:text-brand-dark gap-2 w-max">
+                        Ler Artigo Completo <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+
+                <!-- ARTIGO 2 -->
+                <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 hover:shadow-lg transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 text-xs font-bold text-brand mb-3 uppercase tracking-wide">
+                            <i class="fa-solid fa-book-open"></i> Journal of Sports Sciences
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2 leading-tight">
+                            Intervenção aquática e controle glicêmico no Diabetes Tipo 2
+                        </h3>
+                        <p class="text-sm text-gray-600 mb-6">
+                            Autores: Delevatti, R., Benedet, J., Freitas, C.
+                        </p>
+                    </div>
+                    <!-- ========================================== -->
+                    <!-- LINK DO ARTIGO 2 AQUI NO 'href' -->
+                    <!-- ========================================== -->
+                    <a href="URL-DO-ARTIGO" target="_blank" class="inline-flex items-center text-sm font-bold text-brand hover:text-brand-dark gap-2 w-max">
+                        Ler Artigo Completo <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- PARA ADICIONAR MAIS ARTIGOS, COPIE A DIV <div class="bg-gray-50 border... "> ATÉ AQUI EMBAIXO E COLE AQUI. -->
+                <!-- ========================================== -->
+
+            </div>
+            
+            <div class="mt-10 text-center">
+                 <a href="#" class="inline-block bg-white border border-gray-300 text-gray-700 font-bold py-3 px-6 rounded-lg shadow-sm hover:bg-gray-50 transition">
+                    Ver todas as publicações
+                 </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram Automático (Exemplo de Widget) -->
+    <!-- NOTA SOBRE O INSTAGRAM: O HTML puro não puxa fotos sozinho por causa da segurança do Instagram. 
+         A maneira correta e que todos os sites usam é criar um Widget Gratuito.
+         1. Acesse: elfsight.com ou lightwidget.com
+         2. Crie um widget de feed do Instagram grátis e conecte seu perfil @nupefid
+         3. Eles vão te dar uma tag <script> ou um código. Cole no lugar indicado abaixo!
+    -->
+    <section class="py-20 bg-brand-dark text-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-white opacity-5"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-brand opacity-20"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 mb-6 text-white text-3xl shadow-lg">
+                <i class="fa-brands fa-instagram"></i>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-extrabold font-sans mb-4">
+                Siga nosso dia a dia!
+            </h2>
+            <p class="text-lg text-white/80 mb-10 leading-relaxed max-w-2xl mx-auto">
+                No nosso instagram postamos regularmente nossa agenda, qualificações, defesas de mestrado e doutorado. Acompanhe abaixo!
+            </p>
+            
+            <!-- Instagram Embed -->
+            <div class="max-w-xl mx-auto w-full">
+                <blockquote 
+                    class="instagram-media" 
+                    data-instgrm-permalink="https://www.instagram.com/nupefid/"
+                    data-instgrm-version="14"
+                    style="background: #FFF; border: 0; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); margin: 0 auto; max-width: 540px; width: 100%; padding: 0;">
+                </blockquote>
+                <script async src="https://www.instagram.com/embed.js"></script>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12 border-b border-gray-800 pb-12">
+                
+                <!-- Info -->
+                <div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <h2 class="text-2xl font-bold font-sans tracking-wide">NUPEFID</h2>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Núcleo de Estudo e Pesquisas em Exercício Físico e Doenças Crônicas Não Transmissíveis. Vinculado ao CDS - UFSC.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="https://www.instagram.com/nupefid/" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-brand hover:text-white transition">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Links Rápidos -->
+                <div>
+                    <h3 class="text-lg font-bold font-sans mb-6 uppercase tracking-wider text-gray-300">Navegação</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#sobre" class="text-gray-400 hover:text-brand transition text-sm">Sobre o Núcleo</a></li>
+                        <li><a href="#projetos" class="text-gray-400 hover:text-brand transition text-sm">Projetos de Extensão</a></li>
+                        <li><a href="#galeria" class="text-gray-400 hover:text-brand transition text-sm">Galeria de Fotos</a></li>
+                        <li><a href="#docentes" class="text-gray-400 hover:text-brand transition text-sm">Equipe & Alunos</a></li>
+                        <li><a href="#publicacoes" class="text-gray-400 hover:text-brand transition text-sm">Publicações</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contato / Instituição -->
+                <div>
+                    <h3 class="text-lg font-bold font-sans mb-6 uppercase tracking-wider text-gray-300">Instituição</h3>
+                    <ul class="space-y-4 text-sm text-gray-400">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-building-columns text-brand mt-1"></i>
+                            <div>
+                                <strong class="block text-gray-300">UFSC</strong>
+                                Universidade Federal de Santa Catarina
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-location-dot text-brand mt-1"></i>
+                            <div>
+                                <strong class="block text-gray-300">Centro de Desportos (CDS)</strong>
+                                Campus Universitário Reitor João David Ferreira Lima - Trindade, Florianópolis - SC.
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3 mt-4">
+                            <span class="inline-flex items-center gap-1 bg-gray-800 text-gray-300 px-3 py-1 rounded-full text-xs font-bold border border-gray-700">
+                                <i class="fa-solid fa-star text-yellow-500"></i> CAPES 7
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center text-gray-500 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
+                <p>&copy; 2026 NUPEFID - UFSC. Todos os direitos reservados.</p>
+                <p>Desenvolvido para divulgação científica.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script for mobile menu -->
+    <script>
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            var menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+            } else {
+                menu.classList.add('hidden');
+            }
+        });
+
+        // Close mobile menu when clicking a link
+        const mobileLinks = document.querySelectorAll('#mobile-menu a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
