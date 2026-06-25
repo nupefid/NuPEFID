@@ -40,7 +40,7 @@
                         },
                         'scroll-photo': {
                             '0%': { transform: 'translateX(0)' },
-                            '100%': { transform: 'translateX(calc(-344px * 7))' },
+                            '100%': { transform: 'translateX(calc(-344px * 14))' }, /* Ajustado para aguentar mais fotos dinâmicas */
                         }
                     }
                 }
@@ -49,51 +49,22 @@
     </script>
 
     <style>
-        /* Custom Styles for Infinite Carousel (Projetos) */
-        .slider {
-            background: white;
-            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.125);
-            height: auto;
-            margin: auto;
-            overflow: hidden;
-            position: relative;
-            width: 100%;
-            padding: 2rem 0;
-        }
-        .slider::before,
-        .slider::after {
-            background: linear-gradient(to right, white 0%, rgba(255, 255, 255, 0) 100%);
-            content: "";
-            height: 100%;
-            position: absolute;
-            width: 10%;
-            z-index: 2;
-            top: 0;
-        }
-        .slider::before { left: 0; }
-        .slider::after { right: 0; transform: rotateZ(180deg); }
+        .slider { background: white; box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.125); height: auto; margin: auto; overflow: hidden; position: relative; width: 100%; padding: 2rem 0; }
+        .slider::before, .slider::after { background: linear-gradient(to right, white 0%, rgba(255, 255, 255, 0) 100%); content: ""; height: 100%; position: absolute; width: 10%; z-index: 2; top: 0; }
+        .slider::before { left: 0; } .slider::after { right: 0; transform: rotateZ(180deg); }
         .slide-track { display: flex; width: calc(250px * 16); gap: 2rem; }
-        .slide {
-            width: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 1.5rem; background: #f8fafc; border-radius: 1rem; border: 1px solid #e2e8f0; transition: transform 0.3s ease;
-        }
+        .slide { width: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; background: #f8fafc; border-radius: 1rem; border: 1px solid #e2e8f0; transition: transform 0.3s ease; }
         .slide:hover { transform: translateY(-5px); border-color: #29a58c; }
 
-        /* Custom Styles for Infinite Carousel (Fotos Maiores) */
         .photo-slider { background: transparent; height: auto; margin: auto; overflow: hidden; position: relative; width: 100%; padding: 1rem 0; }
-        .photo-slide-track { display: flex; width: calc(350px * 14); gap: 1.5rem; }
-        .photo-slide {
-            width: 320px; height: 220px; border-radius: 1rem; overflow: hidden; position: relative;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease; flex-shrink: 0;
-        }
+        .photo-slide-track { display: flex; gap: 1.5rem; width: max-content; }
+        .photo-slide { width: 320px; height: 220px; border-radius: 1rem; overflow: hidden; position: relative; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease; flex-shrink: 0; }
         .photo-slide:hover { transform: scale(1.02); }
         .photo-slide img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Detalhes de Alunos (Accordion) */
         details > summary { list-style: none; }
         details > summary::-webkit-details-marker { display: none; }
         
-        /* Scrollbar customizada para os painéis de admin */
         .admin-scroll::-webkit-scrollbar { width: 6px; }
         .admin-scroll::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
         .admin-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -108,12 +79,9 @@
                 <div class="flex-shrink-0 flex items-center gap-3">
                     <div>
                         <h1 class="font-sans font-bold text-2xl text-brand-dark leading-none">NUPEFID</h1>
-                        <span class="text-[10px] sm:text-xs text-gray-500 font-semibold tracking-wide block max-w-[200px] sm:max-w-xs leading-tight mt-1">
-                            Núcleo de Pesquisa em Exercício<br>Físico e Doenças Crônicas
-                        </span>
+                        <span class="text-[10px] sm:text-xs text-gray-500 font-semibold tracking-wide block max-w-[200px] sm:max-w-xs leading-tight mt-1">Núcleo de Pesquisa em Exercício<br>Físico e Doenças Crônicas</span>
                     </div>
                 </div>
-
                 <nav class="hidden md:flex space-x-6 lg:space-x-8">
                     <a href="#sobre" class="text-gray-600 hover:text-brand font-semibold transition text-sm lg:text-base">Sobre</a>
                     <a href="#projetos" class="text-gray-600 hover:text-brand font-semibold transition text-sm lg:text-base">Projetos</a>
@@ -121,11 +89,8 @@
                     <a href="#docentes" class="text-gray-600 hover:text-brand font-semibold transition text-sm lg:text-base">Equipe</a>
                     <a href="#publicacoes" class="text-gray-600 hover:text-brand font-semibold transition text-sm lg:text-base">Publicações</a>
                 </nav>
-
                 <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-brand focus:outline-none p-2">
-                        <i class="fa-solid fa-bars text-2xl"></i>
-                    </button>
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-brand focus:outline-none p-2"><i class="fa-solid fa-bars text-2xl"></i></button>
                 </div>
             </div>
         </div>
@@ -143,27 +108,20 @@
 
     <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-brand">
         <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 32px 32px;"></div>
-        
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-sm font-semibold mb-6">
                 <i class="fa-solid fa-star text-yellow-300"></i> Programa de Pós-Graduação Nota 7 CAPES
             </div>
-            
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-sans font-extrabold tracking-tight mb-6">
-                Conheça o <span class="text-yellow-300">NuPEFID!</span>
-            </h1>
-            
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-sans font-extrabold tracking-tight mb-6">Conheça o <span class="text-yellow-300">NuPEFID!</span></h1>
             <p class="max-w-3xl mx-auto text-lg md:text-xl font-body leading-relaxed mb-10 text-white/90">
                 O Núcleo de Pesquisa em Exercício Físico e Doenças Crônicas da UFSC reúne pesquisadores dedicados a estudar o papel do exercício físico na prevenção e tratamento de doenças crônicas como câncer, diabetes, hipertensão, obesidade e depressão.
             </p>
-            
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="https://www.instagram.com/nupefid/" target="_blank" class="bg-brand-dark text-white border border-white/30 font-bold py-4 px-8 rounded-full shadow-lg hover:bg-opacity-80 hover:scale-105 transition transform duration-200 flex items-center justify-center gap-2">
                     <i class="fa-brands fa-instagram text-xl"></i> Siga nosso Instagram
                 </a>
             </div>
         </div>
-        
         <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
             <svg class="relative block w-full h-[50px] md:h-[100px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
                 <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118,130.9,132.1,200.7,126.9,251.2,123.1,300.9,109.8,349.5,92.8c29-10.1,57.7-21.7,86.6-32.9Z" fill="#f9fafb"></path>
@@ -198,27 +156,21 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div>
                     <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 font-sans mb-6">Produzindo conhecimento científico e promovendo <span class="text-brand">Saúde</span></h2>
-                    <p class="text-lg text-gray-600 mb-6 leading-relaxed">
-                        Nosso time é formado por docentes especialistas, comprometidos em gerar conhecimento científico e promover saúde para diferentes populações, visando a formação de recursos humanos qualificados.
-                    </p>
+                    <p class="text-lg text-gray-600 mb-6 leading-relaxed">Nosso time é formado por docentes especialistas, comprometidos em gerar conhecimento científico e promover saúde para diferentes populações, visando a formação de recursos humanos qualificados.</p>
                     <div class="bg-brand/5 border border-brand/20 rounded-xl p-6 mt-8">
                         <h3 class="font-bold text-lg text-brand-dark mb-4">Dentro do NUPEFID temos:</h3>
                         <div class="space-y-6">
                             <div class="flex items-start gap-4">
                                 <div class="flex-shrink-0 w-12 h-12 bg-white rounded-lg flex items-center justify-center text-brand text-xl font-bold border border-brand/20 shadow-sm"><i class="fa-solid fa-user-graduate"></i></div>
                                 <div>
-                                    <h4 class="text-xl font-bold text-gray-900 font-sans">
-                                        GEPEFID <a href="https://www.instagram.com/gepefid.ufsc/" target="_blank" class="text-brand text-sm ml-2 hover:underline"><i class="fa-brands fa-instagram"></i> @gepefid.ufsc</a>
-                                    </h4>
+                                    <h4 class="text-xl font-bold text-gray-900 font-sans">GEPEFID <a href="https://www.instagram.com/gepefid.ufsc/" target="_blank" class="text-brand text-sm ml-2 hover:underline"><i class="fa-brands fa-instagram"></i> @gepefid.ufsc</a></h4>
                                     <p class="text-gray-600 mt-1 text-sm">Grupo de Estudo e Pesquisa em Exercício Físico e Doenças Crônicas Não Transmissíveis.</p>
                                 </div>
                             </div>
                             <div class="flex items-start gap-4">
                                 <div class="flex-shrink-0 w-12 h-12 bg-white rounded-lg flex items-center justify-center text-brand text-xl font-bold border border-brand/20 shadow-sm"><i class="fa-solid fa-user-graduate"></i></div>
                                 <div>
-                                    <h4 class="text-xl font-bold text-gray-900 font-sans">
-                                        GPEC <a href="https://www.instagram.com/nupefid/" target="_blank" class="text-brand text-sm ml-2 hover:underline"><i class="fa-brands fa-instagram"></i> @nupefid</a>
-                                    </h4>
+                                    <h4 class="text-xl font-bold text-gray-900 font-sans">GPEC <a href="https://www.instagram.com/gpec.ufsc/" target="_blank" class="text-brand text-sm ml-2 hover:underline"><i class="fa-brands fa-instagram"></i> @nupefid</a></h4>
                                     <p class="text-gray-600 mt-1 text-sm">Grupo de Pesquisa em Exercício Clínico.</p>
                                 </div>
                             </div>
@@ -240,21 +192,8 @@
             <p class="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">Confira os registros de nossos projetos, eventos e do dia a dia da nossa equipe.</p>
         </div>
         <div class="photo-slider relative">
-            <div class="photo-slide-track animate-scroll-slow hover:[animation-play-state:paused]">
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700"><img src="assets/foto1.JPG" alt="Foto"></div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700"><img src="assets/foto2.JPG" alt="Foto"></div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700"><img src="assets/foto3.JPG" alt="Foto"></div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700"><img src="assets/foto4.jpeg" alt="Foto"></div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700"><img src="assets/foto5.jpeg" alt="Foto"></div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700"><img src="assets/foto6.jpeg" alt="Foto"></div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700"><img src="assets/foto7.jpeg" alt="Foto"></div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700"><img src="assets/foto1.JPG" alt="Foto"></div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700"><img src="assets/foto2.JPG" alt="Foto"></div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700"><img src="assets/foto3.JPG" alt="Foto"></div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700"><img src="assets/foto4.jpeg" alt="Foto"></div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700"><img src="assets/foto5.jpeg" alt="Foto"></div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700"><img src="assets/foto6.jpeg" alt="Foto"></div>
-                <div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700"><img src="assets/foto7.jpeg" alt="Foto"></div>
+            <div id="galeria-track" class="photo-slide-track animate-scroll-slow hover:[animation-play-state:paused]">
+                <div class="text-gray-500 italic p-4 text-center w-full">Carregando fotos...</div>
             </div>
         </div>
     </section>
@@ -292,40 +231,29 @@
                 <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 font-sans mb-4">Conheça Nosso Corpo Docente</h2>
                 <div class="w-24 h-1 bg-brand mx-auto rounded"></div>
             </div>
-
             <div class="flex flex-wrap justify-center gap-10 lg:gap-14 px-4 sm:px-0">
                 <div class="group text-center w-full sm:w-64 flex-shrink-0">
-                    <h3 class="text-xl font-bold text-gray-900 font-sans mb-1">
-                        <a href="URL_LATTES_AQUI" target="_blank" class="hover:text-brand transition">Profa. Dra. Aline Gerage 👩‍🏫</a>
-                    </h3>
+                    <h3 class="text-xl font-bold text-gray-900 font-sans mb-1"><a href="URL_LATTES_AQUI" target="_blank" class="hover:text-brand transition">Profa. Dra. Aline Gerage 👩‍🏫</a></h3>
                     <p class="text-brand font-semibold text-sm mb-3">Docente e Pesquisadora</p>
                     <p class="text-gray-500 text-sm">Hipertensão arterial, mudança de comportamento e saúde móvel.</p>
                 </div>
                 <div class="group text-center w-full sm:w-64 flex-shrink-0">
-                    <h3 class="text-xl font-bold text-gray-900 font-sans mb-1">
-                        <a href="URL_LATTES_AQUI" target="_blank" class="hover:text-brand transition">Profa. Dra. Cíntia Freitas 👩‍🏫</a>
-                    </h3>
+                    <h3 class="text-xl font-bold text-gray-900 font-sans mb-1"><a href="URL_LATTES_AQUI" target="_blank" class="hover:text-brand transition">Profa. Dra. Cíntia Freitas 👩‍🏫</a></h3>
                     <p class="text-brand font-semibold text-sm mb-3">Docente e Pesquisadora</p>
                     <p class="text-gray-500 text-sm">Pesquisa em Exercício Clínico e Promoção de Saúde.</p>
                 </div>
                 <div class="group text-center w-full sm:w-64 flex-shrink-0">
-                    <h3 class="text-xl font-bold text-gray-900 font-sans mb-1">
-                        <a href="URL_LATTES_AQUI" target="_blank" class="hover:text-brand transition">Prof. Dr. Giovani Del Duca 👨‍🏫</a>
-                    </h3>
+                    <h3 class="text-xl font-bold text-gray-900 font-sans mb-1"><a href="URL_LATTES_AQUI" target="_blank" class="hover:text-brand transition">Prof. Dr. Giovani Del Duca 👨‍🏫</a></h3>
                     <p class="text-brand font-semibold text-sm mb-3">Docente e Pesquisador</p>
                     <p class="text-gray-500 text-sm">Epidemiologia da atividade física, comportamento sedentário e obesidade.</p>
                 </div>
                 <div class="group text-center w-full sm:w-64 flex-shrink-0">
-                    <h3 class="text-xl font-bold text-gray-900 font-sans mb-1">
-                        <a href="URL_LATTES_AQUI" target="_blank" class="hover:text-brand transition">Prof. Dr. Jucemar Benedet 👨‍🏫</a>
-                    </h3>
+                    <h3 class="text-xl font-bold text-gray-900 font-sans mb-1"><a href="URL_LATTES_AQUI" target="_blank" class="hover:text-brand transition">Prof. Dr. Jucemar Benedet 👨‍🏫</a></h3>
                     <p class="text-brand font-semibold text-sm mb-3">Docente e Pesquisador</p>
                     <p class="text-gray-500 text-sm">Exercício voltado para populações especiais e esportes.</p>
                 </div>
                 <div class="group text-center w-full sm:w-64 flex-shrink-0">
-                    <h3 class="text-xl font-bold text-gray-900 font-sans mb-1">
-                        <a href="URL_LATTES_AQUI" target="_blank" class="hover:text-brand transition">Prof. Dr. Rodrigo Delevatti 👨‍🏫</a>
-                    </h3>
+                    <h3 class="text-xl font-bold text-gray-900 font-sans mb-1"><a href="URL_LATTES_AQUI" target="_blank" class="hover:text-brand transition">Prof. Dr. Rodrigo Delevatti 👨‍🏫</a></h3>
                     <p class="text-brand font-semibold text-sm mb-3">Docente e Pesquisador</p>
                     <p class="text-gray-500 text-sm">Treinamento físico, meios aquático e terrestre, diabetes tipo 2.</p>
                 </div>
@@ -339,42 +267,24 @@
                 <h3 class="text-2xl font-extrabold text-gray-900 font-sans mb-2">Alunos que já passaram pelo Núcleo</h3>
                 <p class="text-gray-600">Clique nas categorias abaixo para expandir e ver a lista completa.</p>
             </div>
-
             <div class="space-y-4">
                 <details class="group bg-white rounded-xl shadow-sm border border-gray-200 open:shadow-md transition-all duration-300">
                     <summary class="flex justify-between items-center cursor-pointer p-5 font-bold text-lg text-brand-dark font-sans select-none">
-                        <span><i class="fa-solid fa-graduation-cap mr-2"></i> Mestrado</span>
-                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-gray-400"></i></span>
+                        <span><i class="fa-solid fa-graduation-cap mr-2"></i> Mestrado</span><span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-gray-400"></i></span>
                     </summary>
-                    <div class="p-5 border-t border-gray-100 bg-gray-50/50">
-                        <ul id="lista-mestrado" class="space-y-3">
-                            <li class="text-gray-500 text-sm italic">Carregando alunos...</li>
-                        </ul>
-                    </div>
+                    <div class="p-5 border-t border-gray-100 bg-gray-50/50"><ul id="lista-mestrado" class="space-y-3"><li class="text-gray-500 text-sm italic">Carregando...</li></ul></div>
                 </details>
-
                 <details class="group bg-white rounded-xl shadow-sm border border-gray-200 open:shadow-md transition-all duration-300">
                     <summary class="flex justify-between items-center cursor-pointer p-5 font-bold text-lg text-brand-dark font-sans select-none">
-                        <span><i class="fa-solid fa-user-graduate mr-2"></i> Doutorado</span>
-                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-gray-400"></i></span>
+                        <span><i class="fa-solid fa-user-graduate mr-2"></i> Doutorado</span><span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-gray-400"></i></span>
                     </summary>
-                    <div class="p-5 border-t border-gray-100 bg-gray-50/50">
-                        <ul id="lista-doutorado" class="space-y-3">
-                            <li class="text-gray-500 text-sm italic">Carregando alunos...</li>
-                        </ul>
-                    </div>
+                    <div class="p-5 border-t border-gray-100 bg-gray-50/50"><ul id="lista-doutorado" class="space-y-3"><li class="text-gray-500 text-sm italic">Carregando...</li></ul></div>
                 </details>
-
                 <details class="group bg-white rounded-xl shadow-sm border border-gray-200 open:shadow-md transition-all duration-300">
                     <summary class="flex justify-between items-center cursor-pointer p-5 font-bold text-lg text-brand-dark font-sans select-none">
-                        <span><i class="fa-solid fa-microscope mr-2"></i> Pós-Doutorado</span>
-                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-gray-400"></i></span>
+                        <span><i class="fa-solid fa-microscope mr-2"></i> Pós-Doutorado</span><span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-gray-400"></i></span>
                     </summary>
-                    <div class="p-5 border-t border-gray-100 bg-gray-50/50">
-                        <ul id="lista-posdoc" class="space-y-3">
-                            <li class="text-gray-500 text-sm italic">Carregando alunos...</li>
-                        </ul>
-                    </div>
+                    <div class="p-5 border-t border-gray-100 bg-gray-50/50"><ul id="lista-posdoc" class="space-y-3"><li class="text-gray-500 text-sm italic">Carregando...</li></ul></div>
                 </details>
             </div>
         </div>
@@ -388,7 +298,7 @@
                 <div class="w-24 h-1 bg-brand mx-auto rounded"></div>
             </div>
             <div id="lista-artigos" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="col-span-1 md:col-span-2 text-center text-gray-500 italic">Carregando publicações...</div>
+                <div class="col-span-1 md:col-span-2 text-center text-gray-500 italic">Carregando...</div>
             </div>
         </div>
     </section>
@@ -396,16 +306,10 @@
     <section class="py-20 bg-brand-dark text-white relative overflow-hidden">
         <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-white opacity-5"></div>
         <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-brand opacity-20"></div>
-
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 mb-6 text-white text-3xl shadow-lg">
-                <i class="fa-brands fa-instagram"></i>
-            </div>
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 mb-6 text-white text-3xl shadow-lg"><i class="fa-brands fa-instagram"></i></div>
             <h2 class="text-3xl md:text-4xl font-extrabold font-sans mb-4">Siga nosso dia a dia!</h2>
-            <p class="text-lg text-white/80 mb-10 leading-relaxed max-w-2xl mx-auto">
-                No nosso instagram postamos regularmente nossa agenda, qualificações, defesas de mestrado e doutorado. Acompanhe abaixo!
-            </p>
-            
+            <p class="text-lg text-white/80 mb-10 leading-relaxed max-w-2xl mx-auto">No nosso instagram postamos regularmente nossa agenda, qualificações, defesas de mestrado e doutorado. Acompanhe abaixo!</p>
             <div class="max-w-xl mx-auto w-full">
                 <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/nupefid/" data-instgrm-version="14" style="background: #FFF; border: 0; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); margin: 0 auto; max-width: 540px; width: 100%; padding: 0;"></blockquote>
                 <script async src="https://www.instagram.com/embed.js"></script>
@@ -417,147 +321,98 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12 border-b border-gray-800 pb-12">
                 <div>
-                    <div class="flex items-center gap-3 mb-6">
-                        <h2 class="text-2xl font-bold font-sans tracking-wide">NUPEFID</h2>
-                    </div>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                        Núcleo de Estudo e Pesquisas em Exercício Físico e Doenças Crônicas Não Transmissíveis. Vinculado ao CDS - UFSC.
-                    </p>
-                    <div class="flex space-x-4">
-                        <a href="https://www.instagram.com/nupefid/" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-brand hover:text-white transition">
-                            <i class="fa-brands fa-instagram"></i>
-                        </a>
-                    </div>
+                    <h2 class="text-2xl font-bold font-sans tracking-wide mb-6">NUPEFID</h2>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Núcleo de Estudo e Pesquisas em Exercício Físico e Doenças Crônicas Não Transmissíveis. Vinculado ao CDS - UFSC.</p>
                 </div>
-
-                <div>
-                    <h3 class="text-lg font-bold font-sans mb-6 uppercase tracking-wider text-gray-300">Navegação</h3>
-                    <ul class="space-y-3">
-                        <li><a href="#sobre" class="text-gray-400 hover:text-brand transition text-sm">Sobre o Núcleo</a></li>
-                        <li><a href="#projetos" class="text-gray-400 hover:text-brand transition text-sm">Projetos de Extensão</a></li>
-                        <li><a href="#galeria" class="text-gray-400 hover:text-brand transition text-sm">Galeria de Fotos</a></li>
-                        <li><a href="#docentes" class="text-gray-400 hover:text-brand transition text-sm">Equipe & Alunos</a></li>
-                        <li><a href="#publicacoes" class="text-gray-400 hover:text-brand transition text-sm">Publicações</a></li>
-                    </ul>
-                </div>
-
                 <div>
                     <h3 class="text-lg font-bold font-sans mb-6 uppercase tracking-wider text-gray-300">Instituição</h3>
                     <ul class="space-y-4 text-sm text-gray-400">
-                        <li class="flex items-start gap-3">
-                            <i class="fa-solid fa-building-columns text-brand mt-1"></i>
-                            <div><strong class="block text-gray-300">UFSC</strong>Universidade Federal de Santa Catarina</div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="fa-solid fa-location-dot text-brand mt-1"></i>
-                            <div><strong class="block text-gray-300">Centro de Desportos (CDS)</strong>Campus Universitário Reitor João David Ferreira Lima - Trindade, Florianópolis - SC.</div>
-                        </li>
-                        <li class="flex items-start gap-3 mt-4">
-                            <span class="inline-flex items-center gap-1 bg-gray-800 text-gray-300 px-3 py-1 rounded-full text-xs font-bold border border-gray-700">
-                                <i class="fa-solid fa-star text-yellow-500"></i> CAPES 7
-                            </span>
-                        </li>
+                        <li><strong class="block text-gray-300">UFSC</strong>Universidade Federal de Santa Catarina</li>
+                        <li><strong class="block text-gray-300">Centro de Desportos (CDS)</strong>Florianópolis - SC.</li>
                     </ul>
                 </div>
             </div>
-            <div class="text-center text-gray-500 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
-                <p>&copy; 2026 NUPEFID - UFSC. Todos os direitos reservados.</p>
-                <p>Desenvolvido para divulgação científica.</p>
+            <div class="text-center text-gray-500 text-sm flex justify-between items-center">
+                <p>&copy; 2026 NUPEFID - UFSC.</p>
             </div>
         </div>
-        <button onclick="document.getElementById('loginModal').classList.remove('hidden')" class="absolute bottom-4 right-4 opacity-10 hover:opacity-100 transition p-2">
-            <i class="fa-solid fa-lock text-gray-400"></i>
-        </button>
+        <button onclick="document.getElementById('loginModal').classList.remove('hidden')" class="absolute bottom-4 right-4 opacity-10 hover:opacity-100 transition p-2"><i class="fa-solid fa-lock text-gray-400"></i></button>
     </footer>
 
     <div id="loginModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
         <div class="bg-white rounded-xl p-8 max-w-sm w-full shadow-2xl relative">
-            <button onclick="document.getElementById('loginModal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i class="fa-solid fa-times"></i></button>
+            <button onclick="document.getElementById('loginModal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400"><i class="fa-solid fa-times"></i></button>
             <h2 class="text-2xl font-bold mb-6 text-center text-brand-dark">Acesso Restrito</h2>
             <input type="text" id="adminUser" placeholder="Login" class="w-full mb-4 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand outline-none">
             <input type="password" id="adminPass" placeholder="Senha" class="w-full mb-6 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand outline-none">
-            <button onclick="verificarLogin()" class="w-full bg-brand hover:bg-brand-dark text-white font-bold py-2 rounded-lg transition">Entrar</button>
+            <button onclick="verificarLogin()" class="w-full bg-brand text-white font-bold py-2 rounded-lg transition">Entrar</button>
         </div>
     </div>
 
     <div id="adminPanel" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl p-6 max-w-4xl w-full shadow-2xl max-h-[90vh] overflow-y-auto relative admin-scroll">
+        <div class="bg-white rounded-xl p-6 max-w-6xl w-full shadow-2xl max-h-[90vh] overflow-y-auto relative admin-scroll">
             <button onclick="document.getElementById('adminPanel').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"><i class="fa-solid fa-times"></i></button>
             <h2 class="text-2xl font-bold mb-6 text-brand-dark border-b pb-2">Painel de Controle</h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                    <h3 class="font-bold text-gray-700 mb-4"><i class="fa-solid fa-user-plus text-brand"></i> Formulário de Aluno</h3>
-                    <form id="formAluno" onsubmit="salvarAluno(event)" class="bg-gray-50 p-4 rounded-lg border">
-                        <input type="text" id="alunoNome" placeholder="Nome do Aluno" required class="w-full mb-3 px-3 py-2 border rounded-lg outline-none focus:border-brand text-sm">
-                        <input type="text" id="alunoObjeto" placeholder="Objeto de Estudo (Ex: Efeitos do...)" required class="w-full mb-3 px-3 py-2 border rounded-lg outline-none focus:border-brand text-sm">
-                        <select id="alunoNivel" class="w-full mb-4 px-3 py-2 border rounded-lg outline-none focus:border-brand text-sm text-gray-700">
+                    <h3 class="font-bold text-gray-700 mb-4"><i class="fa-solid fa-user-plus text-brand"></i> Alunos</h3>
+                    <form id="formAluno" onsubmit="salvarAluno(event)" class="bg-gray-50 p-4 rounded-lg border mb-4">
+                        <input type="text" id="alunoNome" placeholder="Nome" required class="w-full mb-2 px-3 py-2 border rounded text-sm">
+                        <input type="text" id="alunoObjeto" placeholder="Objeto de Estudo" required class="w-full mb-2 px-3 py-2 border rounded text-sm">
+                        <select id="alunoNivel" class="w-full mb-3 px-3 py-2 border rounded text-sm">
                             <option value="mestrado">Mestrado</option>
                             <option value="doutorado">Doutorado</option>
                             <option value="posdoc">Pós-Doutorado</option>
                         </select>
-                        <div class="flex gap-2">
-                            <button type="submit" id="btnSalvarAluno" class="w-full bg-brand text-white font-bold py-2 rounded-lg hover:bg-brand-dark transition text-sm">Salvar Aluno</button>
-                            <button type="button" id="btnCancelarAluno" onclick="cancelarEdicaoAluno()" class="hidden w-1/3 bg-gray-400 text-white font-bold py-2 rounded-lg hover:bg-gray-500 transition text-sm">Cancelar</button>
-                        </div>
+                        <button type="submit" id="btnSalvarAluno" class="w-full bg-brand text-white py-2 rounded text-sm font-bold mb-2">Salvar Aluno</button>
+                        <button type="button" id="btnCancelarAluno" onclick="cancelarEdicaoAluno()" class="hidden w-full bg-gray-400 text-white py-2 rounded text-sm font-bold">Cancelar</button>
                     </form>
+                    <ul id="adminListaAlunos" class="space-y-2 max-h-40 overflow-y-auto admin-scroll text-sm"></ul>
                 </div>
 
                 <div>
-                    <h3 class="font-bold text-gray-700 mb-4"><i class="fa-solid fa-file-circle-plus text-brand"></i> Formulário de Artigo</h3>
-                    <form id="formArtigo" onsubmit="salvarArtigo(event)" class="bg-gray-50 p-4 rounded-lg border">
-                        <input type="text" id="artigoTitulo" placeholder="Nome do Artigo" required class="w-full mb-3 px-3 py-2 border rounded-lg outline-none focus:border-brand text-sm">
-                        <input type="url" id="artigoLink" placeholder="Link (URL)" required class="w-full mb-4 px-3 py-2 border rounded-lg outline-none focus:border-brand text-sm">
-                        <div class="flex gap-2">
-                            <button type="submit" id="btnSalvarArtigo" class="w-full bg-brand text-white font-bold py-2 rounded-lg hover:bg-brand-dark transition text-sm">Salvar Artigo</button>
-                            <button type="button" id="btnCancelarArtigo" onclick="cancelarEdicaoArtigo()" class="hidden w-1/3 bg-gray-400 text-white font-bold py-2 rounded-lg hover:bg-gray-500 transition text-sm">Cancelar</button>
-                        </div>
+                    <h3 class="font-bold text-gray-700 mb-4"><i class="fa-solid fa-file-circle-plus text-brand"></i> Artigos</h3>
+                    <form id="formArtigo" onsubmit="salvarArtigo(event)" class="bg-gray-50 p-4 rounded-lg border mb-4">
+                        <input type="text" id="artigoTitulo" placeholder="Título" required class="w-full mb-2 px-3 py-2 border rounded text-sm">
+                        <input type="url" id="artigoLink" placeholder="Link (URL)" required class="w-full mb-3 px-3 py-2 border rounded text-sm">
+                        <button type="submit" id="btnSalvarArtigo" class="w-full bg-brand text-white py-2 rounded text-sm font-bold mb-2">Salvar Artigo</button>
+                        <button type="button" id="btnCancelarArtigo" onclick="cancelarEdicaoArtigo()" class="hidden w-full bg-gray-400 text-white py-2 rounded text-sm font-bold">Cancelar</button>
                     </form>
+                    <ul id="adminListaArtigos" class="space-y-2 max-h-40 overflow-y-auto admin-scroll text-sm"></ul>
                 </div>
-            </div>
 
-            <div class="mt-8 border-t border-gray-200 pt-6">
-                <h3 class="font-bold text-gray-700 mb-4"><i class="fa-solid fa-list-check text-brand"></i> Cadastros Existentes (Editar / Excluir)</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <h4 class="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Alunos Cadastrados</h4>
-                        <ul id="adminListaAlunos" class="space-y-2 max-h-48 overflow-y-auto pr-2 admin-scroll"></ul>
-                    </div>
-                    <div>
-                        <h4 class="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Artigos Cadastrados</h4>
-                        <ul id="adminListaArtigos" class="space-y-2 max-h-48 overflow-y-auto pr-2 admin-scroll"></ul>
-                    </div>
+                <div>
+                    <h3 class="font-bold text-gray-700 mb-4"><i class="fa-solid fa-images text-brand"></i> Galeria de Fotos</h3>
+                    <form id="formGaleria" onsubmit="salvarFoto(event)" class="bg-gray-50 p-4 rounded-lg border mb-4">
+                        <input type="file" id="fotoInput" accept="image/*" required class="w-full mb-3 text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-brand/10 file:text-brand hover:file:bg-brand/20">
+                        <button type="submit" id="btnSalvarFoto" class="w-full bg-brand text-white py-2 rounded text-sm font-bold">Fazer Upload da Foto</button>
+                    </form>
+                    <ul id="adminListaGaleria" class="space-y-2 max-h-40 overflow-y-auto admin-scroll text-sm"></ul>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-            var menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        });
-        const mobileLinks = document.querySelectorAll('#mobile-menu a');
-        mobileLinks.forEach(link => link.addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden')));
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+        document.querySelectorAll('#mobile-menu a').forEach(link => link.addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden')));
 
         function verificarLogin() {
-            const user = document.getElementById('adminUser').value;
-            const pass = document.getElementById('adminPass').value;
-            if(user === 'NUPEFID' && pass === 'Nupefid321') {
+            if(document.getElementById('adminUser').value === 'NUPEFID' && document.getElementById('adminPass').value === 'Nupefid321') {
                 document.getElementById('loginModal').classList.add('hidden');
                 document.getElementById('adminPanel').classList.remove('hidden');
                 document.getElementById('adminUser').value = '';
                 document.getElementById('adminPass').value = '';
-            } else {
-                alert('Credenciais incorretas.');
-            }
+            } else { alert('Credenciais incorretas.'); }
         }
     </script>
 
     <script type="module">
-        // Importando funções extras (updateDoc, deleteDoc, doc)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        // Importando o Storage:
+        import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBXxYlpBp7Ob7tIbXhR3-h-dK6Sb8XaolQ",
@@ -570,8 +425,8 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const storage = getStorage(app); // Inicializando o Storage
 
-        // Variáveis globais para rastrear o que está sendo editado
         window.alunosGlobais = [];
         window.artigosGlobais = [];
         window.editAlunoId = null;
@@ -580,181 +435,140 @@
         // ------------- ALUNOS -------------
         window.salvarAluno = async function(e) {
             e.preventDefault();
-            const btn = document.getElementById('btnSalvarAluno');
-            btn.innerHTML = "Salvando...";
+            document.getElementById('btnSalvarAluno').innerText = "Salvando...";
             const nome = document.getElementById('alunoNome').value;
             const objeto = document.getElementById('alunoObjeto').value;
             const nivel = document.getElementById('alunoNivel').value;
-            
             try {
-                if(window.editAlunoId) {
-                    await updateDoc(doc(db, "alunos", window.editAlunoId), { nome, objeto, nivel });
-                    window.cancelarEdicaoAluno();
-                } else {
-                    await addDoc(collection(db, "alunos"), { nome, objeto, nivel, data: new Date() });
-                    document.getElementById('formAluno').reset();
-                }
+                if(window.editAlunoId) await updateDoc(doc(db, "alunos", window.editAlunoId), { nome, objeto, nivel });
+                else await addDoc(collection(db, "alunos"), { nome, objeto, nivel, data: new Date() });
+                window.cancelarEdicaoAluno();
                 carregarDados();
-            } catch(error) {
-                console.error("Erro", error);
-                alert("Erro ao salvar.");
-            }
-            btn.innerHTML = window.editAlunoId ? "Atualizar Aluno" : "Salvar Aluno";
+            } catch(e) { alert("Erro ao salvar."); console.error(e); }
         };
-
         window.editarAluno = function(id) {
-            const aluno = window.alunosGlobais.find(a => a.id === id);
-            if(!aluno) return;
-            document.getElementById('alunoNome').value = aluno.nome;
-            document.getElementById('alunoObjeto').value = aluno.objeto;
-            document.getElementById('alunoNivel').value = aluno.nivel;
-            
-            window.editAlunoId = id;
-            document.getElementById('btnSalvarAluno').innerText = "Atualizar Aluno";
-            document.getElementById('btnCancelarAluno').classList.remove('hidden');
+            const a = window.alunosGlobais.find(x => x.id === id);
+            document.getElementById('alunoNome').value = a.nome; document.getElementById('alunoObjeto').value = a.objeto; document.getElementById('alunoNivel').value = a.nivel;
+            window.editAlunoId = id; document.getElementById('btnSalvarAluno').innerText = "Atualizar"; document.getElementById('btnCancelarAluno').classList.remove('hidden');
         };
-
-        window.cancelarEdicaoAluno = function() {
-            document.getElementById('formAluno').reset();
-            window.editAlunoId = null;
-            document.getElementById('btnSalvarAluno').innerText = "Salvar Aluno";
-            document.getElementById('btnCancelarAluno').classList.add('hidden');
-        };
+        window.cancelarEdicaoAluno = function() { document.getElementById('formAluno').reset(); window.editAlunoId = null; document.getElementById('btnSalvarAluno').innerText = "Salvar Aluno"; document.getElementById('btnCancelarAluno').classList.add('hidden'); };
 
         // ------------- ARTIGOS -------------
         window.salvarArtigo = async function(e) {
             e.preventDefault();
-            const btn = document.getElementById('btnSalvarArtigo');
-            btn.innerHTML = "Salvando...";
+            document.getElementById('btnSalvarArtigo').innerText = "Salvando...";
             const titulo = document.getElementById('artigoTitulo').value;
             const link = document.getElementById('artigoLink').value;
+            try {
+                if(window.editArtigoId) await updateDoc(doc(db, "artigos", window.editArtigoId), { titulo, link });
+                else await addDoc(collection(db, "artigos"), { titulo, link, data: new Date() });
+                window.cancelarEdicaoArtigo();
+                carregarDados();
+            } catch(e) { alert("Erro ao salvar."); console.error(e); }
+        };
+        window.editarArtigo = function(id) {
+            const a = window.artigosGlobais.find(x => x.id === id);
+            document.getElementById('artigoTitulo').value = a.titulo; document.getElementById('artigoLink').value = a.link;
+            window.editArtigoId = id; document.getElementById('btnSalvarArtigo').innerText = "Atualizar"; document.getElementById('btnCancelarArtigo').classList.remove('hidden');
+        };
+        window.cancelarEdicaoArtigo = function() { document.getElementById('formArtigo').reset(); window.editArtigoId = null; document.getElementById('btnSalvarArtigo').innerText = "Salvar Artigo"; document.getElementById('btnCancelarArtigo').classList.add('hidden'); };
+
+        // ------------- GALERIA DE FOTOS (NOVO) -------------
+        window.salvarFoto = async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSalvarFoto');
+            const fileInput = document.getElementById('fotoInput');
+            const file = fileInput.files[0];
+            
+            if (!file) return;
+
+            btn.innerText = "Fazendo Upload...";
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
 
             try {
-                if(window.editArtigoId) {
-                    await updateDoc(doc(db, "artigos", window.editArtigoId), { titulo, link });
-                    window.cancelarEdicaoArtigo();
-                } else {
-                    await addDoc(collection(db, "artigos"), { titulo, link, data: new Date() });
-                    document.getElementById('formArtigo').reset();
-                }
+                // 1. Criar referência e enviar para o Firebase Storage
+                const storageRef = ref(storage, 'galeria/' + new Date().getTime() + '_' + file.name);
+                await uploadBytes(storageRef, file);
+                
+                // 2. Pegar o Link (URL) público da foto
+                const urlDaFoto = await getDownloadURL(storageRef);
+
+                // 3. Salvar o Link no banco de dados Firestore
+                await addDoc(collection(db, "galeria"), { 
+                    url: urlDaFoto, 
+                    nomeOriginal: file.name,
+                    data: new Date() 
+                });
+
+                fileInput.value = ""; // Limpa o input
+                alert("Foto adicionada à galeria!");
                 carregarDados();
             } catch(error) {
-                console.error("Erro", error);
-                alert("Erro ao salvar.");
+                console.error("Erro no upload", error);
+                alert("Erro ao fazer upload da foto. O Firebase Storage está ativado?");
             }
-            btn.innerHTML = window.editArtigoId ? "Atualizar Artigo" : "Salvar Artigo";
+
+            btn.innerText = "Fazer Upload da Foto";
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
         };
 
-        window.editarArtigo = function(id) {
-            const artigo = window.artigosGlobais.find(a => a.id === id);
-            if(!artigo) return;
-            document.getElementById('artigoTitulo').value = artigo.titulo;
-            document.getElementById('artigoLink').value = artigo.link;
-            
-            window.editArtigoId = id;
-            document.getElementById('btnSalvarArtigo').innerText = "Atualizar Artigo";
-            document.getElementById('btnCancelarArtigo').classList.remove('hidden');
-        };
-
-        window.cancelarEdicaoArtigo = function() {
-            document.getElementById('formArtigo').reset();
-            window.editArtigoId = null;
-            document.getElementById('btnSalvarArtigo').innerText = "Salvar Artigo";
-            document.getElementById('btnCancelarArtigo').classList.add('hidden');
-        };
-
-        // ------------- FUNÇÃO DE EXCLUIR -------------
         window.excluirItem = async function(colecao, id) {
-            if(confirm("Tem certeza que deseja excluir este item?")) {
-                try {
-                    await deleteDoc(doc(db, colecao, id));
-                    carregarDados();
-                } catch(e) {
-                    console.error(e);
-                    alert("Erro ao excluir.");
-                }
+            if(confirm("Tem certeza que deseja excluir?")) {
+                try { await deleteDoc(doc(db, colecao, id)); carregarDados(); } 
+                catch(e) { console.error(e); alert("Erro ao excluir."); }
             }
         };
 
-        // ------------- CARREGAR DADOS DA TELA E DO PAINEL -------------
+        // ------------- CARREGAR TODOS OS DADOS -------------
         async function carregarDados() {
             try {
-                // Alunos
+                // Carregar Alunos
                 const alunosSnapshot = await getDocs(collection(db, "alunos"));
-                let htmlMestrado = '', htmlDoutorado = '', htmlPosDoc = '', htmlAdminAlunos = '';
+                let hM = '', hD = '', hP = '', hAdminA = '';
                 window.alunosGlobais = [];
-                
                 alunosSnapshot.forEach((docSnap) => {
-                    const aluno = { id: docSnap.id, ...docSnap.data() };
-                    window.alunosGlobais.push(aluno);
-
-                    // HTML Público
-                    const itemHTML = `
-                        <li class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                            <div><strong class="text-gray-900 block">${aluno.nome}</strong><span class="text-sm text-gray-500 italic">"${aluno.objeto}"</span></div>
-                        </li>
-                    `;
-                    if(aluno.nivel === 'mestrado') htmlMestrado += itemHTML;
-                    if(aluno.nivel === 'doutorado') htmlDoutorado += itemHTML;
-                    if(aluno.nivel === 'posdoc') htmlPosDoc += itemHTML;
-
-                    // HTML Admin
-                    htmlAdminAlunos += `
-                        <li class="flex justify-between items-center bg-white p-2 rounded border shadow-sm">
-                            <span class="truncate pr-2 text-xs font-semibold text-gray-700">${aluno.nome}</span>
-                            <div class="flex gap-3 shrink-0">
-                                <button onclick="editarAluno('${aluno.id}')" class="text-blue-500 hover:text-blue-700"><i class="fa-solid fa-pen"></i></button>
-                                <button onclick="excluirItem('alunos', '${aluno.id}')" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </li>
-                    `;
+                    const a = { id: docSnap.id, ...docSnap.data() }; window.alunosGlobais.push(a);
+                    const item = `<li class="bg-white p-4 rounded-lg shadow-sm border"><div><strong class="text-gray-900 block">${a.nome}</strong><span class="text-sm text-gray-500 italic">"${a.objeto}"</span></div></li>`;
+                    if(a.nivel==='mestrado') hM+=item; if(a.nivel==='doutorado') hD+=item; if(a.nivel==='posdoc') hP+=item;
+                    hAdminA += `<li class="flex justify-between items-center bg-white p-2 rounded border shadow-sm"><span class="truncate pr-2 text-xs font-semibold">${a.nome}</span><div class="flex gap-2"><button onclick="editarAluno('${a.id}')" class="text-blue-500"><i class="fa-solid fa-pen"></i></button><button onclick="excluirItem('alunos', '${a.id}')" class="text-red-500"><i class="fa-solid fa-trash"></i></button></div></li>`;
                 });
+                document.getElementById('lista-mestrado').innerHTML = hM || '<li class="text-gray-500 text-sm">Nenhum aluno.</li>';
+                document.getElementById('lista-doutorado').innerHTML = hD || '<li class="text-gray-500 text-sm">Nenhum aluno.</li>';
+                document.getElementById('lista-posdoc').innerHTML = hP || '<li class="text-gray-500 text-sm">Nenhum aluno.</li>';
+                document.getElementById('adminListaAlunos').innerHTML = hAdminA;
 
-                document.getElementById('lista-mestrado').innerHTML = htmlMestrado || '<li class="text-gray-500 text-sm italic">Nenhum aluno cadastrado.</li>';
-                document.getElementById('lista-doutorado').innerHTML = htmlDoutorado || '<li class="text-gray-500 text-sm italic">Nenhum aluno cadastrado.</li>';
-                document.getElementById('lista-posdoc').innerHTML = htmlPosDoc || '<li class="text-gray-500 text-sm italic">Nenhum aluno cadastrado.</li>';
-                document.getElementById('adminListaAlunos').innerHTML = htmlAdminAlunos || '<li class="text-gray-400 text-xs italic">Lista vazia.</li>';
-
-                // Artigos
+                // Carregar Artigos
                 const artigosSnapshot = await getDocs(collection(db, "artigos"));
-                let htmlArtigos = '', htmlAdminArtigos = '';
+                let hArt = '', hAdminArt = '';
                 window.artigosGlobais = [];
-                
                 artigosSnapshot.forEach((docSnap) => {
-                    const artigo = { id: docSnap.id, ...docSnap.data() };
-                    window.artigosGlobais.push(artigo);
+                    const a = { id: docSnap.id, ...docSnap.data() }; window.artigosGlobais.push(a);
+                    hArt += `<div class="bg-gray-50 border rounded-xl p-6 hover:shadow-lg transition"><div><div class="flex items-center gap-2 text-xs font-bold text-brand mb-3 uppercase"><i class="fa-solid fa-book-open"></i> Publicação</div><h3 class="text-lg font-bold text-gray-900 mb-2 leading-tight">${a.titulo}</h3></div><a href="${a.link}" target="_blank" class="inline-flex items-center text-sm font-bold text-brand hover:text-brand-dark gap-2 mt-4">Ler Artigo Completo <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>`;
+                    hAdminArt += `<li class="flex justify-between items-center bg-white p-2 rounded border shadow-sm"><span class="truncate pr-2 text-xs font-semibold">${a.titulo}</span><div class="flex gap-2"><button onclick="editarArtigo('${a.id}')" class="text-blue-500"><i class="fa-solid fa-pen"></i></button><button onclick="excluirItem('artigos', '${a.id}')" class="text-red-500"><i class="fa-solid fa-trash"></i></button></div></li>`;
+                });
+                document.getElementById('lista-artigos').innerHTML = hArt || '<div class="text-center text-gray-500 italic">Nenhum artigo.</div>';
+                document.getElementById('adminListaArtigos').innerHTML = hAdminArt;
 
-                    // HTML Público
-                    htmlArtigos += `
-                        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 hover:shadow-lg transition flex flex-col justify-between">
-                            <div>
-                                <div class="flex items-center gap-2 text-xs font-bold text-brand mb-3 uppercase tracking-wide"><i class="fa-solid fa-book-open"></i> Publicação</div>
-                                <h3 class="text-lg font-bold text-gray-900 mb-2 leading-tight">${artigo.titulo}</h3>
-                            </div>
-                            <a href="${artigo.link}" target="_blank" class="inline-flex items-center text-sm font-bold text-brand hover:text-brand-dark gap-2 w-max mt-4">
-                                Ler Artigo Completo <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                            </a>
-                        </div>
-                    `;
-
-                    // HTML Admin
-                    htmlAdminArtigos += `
-                        <li class="flex justify-between items-center bg-white p-2 rounded border shadow-sm">
-                            <span class="truncate pr-2 text-xs font-semibold text-gray-700">${artigo.titulo}</span>
-                            <div class="flex gap-3 shrink-0">
-                                <button onclick="editarArtigo('${artigo.id}')" class="text-blue-500 hover:text-blue-700"><i class="fa-solid fa-pen"></i></button>
-                                <button onclick="excluirItem('artigos', '${artigo.id}')" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </li>
-                    `;
+                // Carregar Galeria
+                const galeriaSnapshot = await getDocs(collection(db, "galeria"));
+                let hGaleria = '', hAdminGaleria = '';
+                galeriaSnapshot.forEach((docSnap) => {
+                    const g = { id: docSnap.id, ...docSnap.data() };
+                    // Monta as divs de foto para o carrossel público
+                    hGaleria += `<div class="photo-slide bg-gray-800 flex items-center justify-center border border-gray-700"><img src="${g.url}" alt="Galeria Nupefid"></div>`;
+                    // Monta a lista do painel de controle
+                    hAdminGaleria += `<li class="flex justify-between items-center bg-white p-2 rounded border shadow-sm"><div class="flex items-center gap-2 overflow-hidden"><img src="${g.url}" class="w-8 h-8 object-cover rounded"><span class="truncate pr-2 text-xs font-semibold">Foto</span></div><button onclick="excluirItem('galeria', '${g.id}')" class="text-red-500"><i class="fa-solid fa-trash"></i></button></li>`;
                 });
 
-                document.getElementById('lista-artigos').innerHTML = htmlArtigos || '<div class="col-span-1 md:col-span-2 text-center text-gray-500 italic">Nenhum artigo publicado ainda.</div>';
-                document.getElementById('adminListaArtigos').innerHTML = htmlAdminArtigos || '<li class="text-gray-400 text-xs italic">Lista vazia.</li>';
+                // Se houver fotos, duplica para o efeito de rolagem infinita do CSS não quebrar
+                if (hGaleria !== '') {
+                    document.getElementById('galeria-track').innerHTML = hGaleria + hGaleria;
+                } else {
+                    document.getElementById('galeria-track').innerHTML = '<div class="text-gray-500 italic p-4 text-center w-full">Nenhuma foto adicionada na galeria.</div>';
+                }
+                document.getElementById('adminListaGaleria').innerHTML = hAdminGaleria || '<li class="text-gray-400 text-xs italic">Nenhuma foto.</li>';
 
-            } catch (error) {
-                console.error("Erro ao carregar dados", error);
-            }
+            } catch (error) { console.error(error); }
         }
 
         carregarDados();
